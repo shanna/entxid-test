@@ -14,8 +14,8 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/graphql/errcode"
+	"github.com/rs/xid"
 	"github.com/shanna/entxid-test/ent/user"
-	"github.com/shanna/entxid-test/xid"
 	"github.com/vektah/gqlparser/v2/gqlerror"
 	"github.com/vmihailenco/msgpack/v5"
 )

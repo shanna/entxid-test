@@ -11,9 +11,9 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/rs/xid"
 	"github.com/shanna/entxid-test/ent/predicate"
 	"github.com/shanna/entxid-test/ent/user"
-	"github.com/shanna/entxid-test/xid"
 )
 
 // UserQuery is the builder for querying User entities.

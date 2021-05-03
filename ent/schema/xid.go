@@ -4,7 +4,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/mixin"
-	"github.com/shanna/entxid-test/xid"
+	"github.com/rs/xid"
 )
 
 // MixinXID to be shared will all different schemas.

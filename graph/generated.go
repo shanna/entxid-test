@@ -13,8 +13,9 @@ import (
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/graphql/introspection"
+	"github.com/rs/xid"
 	"github.com/shanna/entxid-test/ent"
-	"github.com/shanna/entxid-test/xid"
+	"github.com/shanna/entxid-test/graph/xidql"
 	gqlparser "github.com/vektah/gqlparser/v2"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -59,7 +60,7 @@ type ComplexityRoot struct {
 
 	Query struct {
 		Node  func(childComplexity int, id xid.ID) int
-		Nodes func(childComplexity int, ids []*xid.ID) int
+		Nodes func(childComplexity int, ids []xid.ID) int
 		Users func(childComplexity int, after *ent.Cursor, first *int, before *ent.Cursor, last *int, orderBy *ent.UserOrder) int
 	}
 
@@ -86,7 +87,7 @@ type MutationResolver interface {
 }
 type QueryResolver interface {
 	Node(ctx context.Context, id xid.ID) (ent.Noder, error)
-	Nodes(ctx context.Context, ids []*xid.ID) ([]ent.Noder, error)
+	Nodes(ctx context.Context, ids []xid.ID) ([]ent.Noder, error)
 	Users(ctx context.Context, after *ent.Cursor, first *int, before *ent.Cursor, last *int, orderBy *ent.UserOrder) (*ent.UserConnection, error)
 }
 
@@ -174,7 +175,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.Nodes(childComplexity, args["ids"].([]*xid.ID)), true
+		return e.complexity.Query.Nodes(childComplexity, args["ids"].([]xid.ID)), true
 
 	case "Query.users":
 		if e.complexity.Query.Users == nil {
@@ -409,7 +410,7 @@ func (ec *executionContext) field_Query_node_args(ctx context.Context, rawArgs m
 	var arg0 xid.ID
 	if tmp, ok := rawArgs["id"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-		arg0, err = ec.unmarshalNID2githubᚗcomᚋshannaᚋentxidᚑtestᚋxidᚐID(ctx, tmp)
+		arg0, err = ec.unmarshalNID2githubᚗcomᚋrsᚋxidᚐID(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -421,10 +422,10 @@ func (ec *executionContext) field_Query_node_args(ctx context.Context, rawArgs m
 func (ec *executionContext) field_Query_nodes_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
-	var arg0 []*xid.ID
+	var arg0 []xid.ID
 	if tmp, ok := rawArgs["ids"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ids"))
-		arg0, err = ec.unmarshalNID2ᚕᚖgithubᚗcomᚋshannaᚋentxidᚑtestᚋxidᚐIDᚄ(ctx, tmp)
+		arg0, err = ec.unmarshalNID2ᚕgithubᚗcomᚋrsᚋxidᚐIDᚄ(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -797,7 +798,7 @@ func (ec *executionContext) _Query_nodes(ctx context.Context, field graphql.Coll
 	fc.Args = args
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().Nodes(rctx, args["ids"].([]*xid.ID))
+		return ec.resolvers.Query().Nodes(rctx, args["ids"].([]xid.ID))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -956,7 +957,7 @@ func (ec *executionContext) _User_id(ctx context.Context, field graphql.Collecte
 	}
 	res := resTmp.(xid.ID)
 	fc.Result = res
-	return ec.marshalNID2githubᚗcomᚋshannaᚋentxidᚑtestᚋxidᚐID(ctx, field.Selections, res)
+	return ec.marshalNID2githubᚗcomᚋrsᚋxidᚐID(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _User_name(ctx context.Context, field graphql.CollectedField, obj *ent.User) (ret graphql.Marshaler) {
@@ -2823,17 +2824,22 @@ func (ec *executionContext) marshalNCursor2githubᚗcomᚋshannaᚋentxidᚑtest
 	return v
 }
 
-func (ec *executionContext) unmarshalNID2githubᚗcomᚋshannaᚋentxidᚑtestᚋxidᚐID(ctx context.Context, v interface{}) (xid.ID, error) {
-	var res xid.ID
-	err := res.UnmarshalGQL(v)
+func (ec *executionContext) unmarshalNID2githubᚗcomᚋrsᚋxidᚐID(ctx context.Context, v interface{}) (xid.ID, error) {
+	res, err := xidql.UnmarshalID(v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNID2githubᚗcomᚋshannaᚋentxidᚑtestᚋxidᚐID(ctx context.Context, sel ast.SelectionSet, v xid.ID) graphql.Marshaler {
-	return v
+func (ec *executionContext) marshalNID2githubᚗcomᚋrsᚋxidᚐID(ctx context.Context, sel ast.SelectionSet, v xid.ID) graphql.Marshaler {
+	res := xidql.MarshalID(v)
+	if res == graphql.Null {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "must not be null")
+		}
+	}
+	return res
 }
 
-func (ec *executionContext) unmarshalNID2ᚕᚖgithubᚗcomᚋshannaᚋentxidᚑtestᚋxidᚐIDᚄ(ctx context.Context, v interface{}) ([]*xid.ID, error) {
+func (ec *executionContext) unmarshalNID2ᚕgithubᚗcomᚋrsᚋxidᚐIDᚄ(ctx context.Context, v interface{}) ([]xid.ID, error) {
 	var vSlice []interface{}
 	if v != nil {
 		if tmp1, ok := v.([]interface{}); ok {
@@ -2843,10 +2849,10 @@ func (ec *executionContext) unmarshalNID2ᚕᚖgithubᚗcomᚋshannaᚋentxidᚑ
 		}
 	}
 	var err error
-	res := make([]*xid.ID, len(vSlice))
+	res := make([]xid.ID, len(vSlice))
 	for i := range vSlice {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
-		res[i], err = ec.unmarshalNID2ᚖgithubᚗcomᚋshannaᚋentxidᚑtestᚋxidᚐID(ctx, vSlice[i])
+		res[i], err = ec.unmarshalNID2githubᚗcomᚋrsᚋxidᚐID(ctx, vSlice[i])
 		if err != nil {
 			return nil, err
 		}
@@ -2854,29 +2860,13 @@ func (ec *executionContext) unmarshalNID2ᚕᚖgithubᚗcomᚋshannaᚋentxidᚑ
 	return res, nil
 }
 
-func (ec *executionContext) marshalNID2ᚕᚖgithubᚗcomᚋshannaᚋentxidᚑtestᚋxidᚐIDᚄ(ctx context.Context, sel ast.SelectionSet, v []*xid.ID) graphql.Marshaler {
+func (ec *executionContext) marshalNID2ᚕgithubᚗcomᚋrsᚋxidᚐIDᚄ(ctx context.Context, sel ast.SelectionSet, v []xid.ID) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	for i := range v {
-		ret[i] = ec.marshalNID2ᚖgithubᚗcomᚋshannaᚋentxidᚑtestᚋxidᚐID(ctx, sel, v[i])
+		ret[i] = ec.marshalNID2githubᚗcomᚋrsᚋxidᚐID(ctx, sel, v[i])
 	}
 
 	return ret
-}
-
-func (ec *executionContext) unmarshalNID2ᚖgithubᚗcomᚋshannaᚋentxidᚑtestᚋxidᚐID(ctx context.Context, v interface{}) (*xid.ID, error) {
-	var res = new(xid.ID)
-	err := res.UnmarshalGQL(v)
-	return res, graphql.ErrorOnPath(ctx, err)
-}
-
-func (ec *executionContext) marshalNID2ᚖgithubᚗcomᚋshannaᚋentxidᚑtestᚋxidᚐID(ctx context.Context, sel ast.SelectionSet, v *xid.ID) graphql.Marshaler {
-	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	return v
 }
 
 func (ec *executionContext) unmarshalNInt2int(ctx context.Context, v interface{}) (int, error) {

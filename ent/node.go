@@ -10,8 +10,8 @@ import (
 	"entgo.io/contrib/entgql"
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/hashicorp/go-multierror"
+	"github.com/rs/xid"
 	"github.com/shanna/entxid-test/ent/user"
-	"github.com/shanna/entxid-test/xid"
 )
 
 // Noder wraps the basic Node method.

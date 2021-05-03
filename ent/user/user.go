@@ -3,7 +3,7 @@
 package user
 
 import (
-	"github.com/shanna/entxid-test/xid"
+	"github.com/rs/xid"
 )
 
 const (

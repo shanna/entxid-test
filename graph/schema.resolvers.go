@@ -6,8 +6,8 @@ package graph
 import (
 	"context"
 
+	xid1 "github.com/rs/xid"
 	"github.com/shanna/entxid-test/ent"
-	"github.com/shanna/entxid-test/xid"
 )
 
 func (r *mutationResolver) CreateUser(ctx context.Context, input UserInput) (*ent.User, error) {
@@ -25,18 +25,12 @@ func (r *mutationResolver) ClearUsers(ctx context.Context) (int, error) {
 		Exec(ctx)
 }
 
-func (r *queryResolver) Node(ctx context.Context, id xid.ID) (ent.Noder, error) {
+func (r *queryResolver) Node(ctx context.Context, id xid1.ID) (ent.Noder, error) {
 	return r.client.Noder(ctx, id)
 }
 
-func (r *queryResolver) Nodes(ctx context.Context, ids []*xid.ID) ([]ent.Noder, error) {
-	// TODO: Should I be worried my Nodes(ctx context.Context, ids []*xid.ID) is generated as a list of pointers
-	// while the examples are a list of values? Is it because the schema thinks by ID is optional or something?
-	copyIDs := make([]xid.ID, len(ids))
-	for _, i := range ids {
-		copyIDs = append(copyIDs, *i)
-	}
-	return r.client.Noders(ctx, copyIDs)
+func (r *queryResolver) Nodes(ctx context.Context, ids []xid1.ID) ([]ent.Noder, error) {
+	return r.client.Noders(ctx, ids)
 }
 
 func (r *queryResolver) Users(ctx context.Context, after *ent.Cursor, first *int, before *ent.Cursor, last *int, orderBy *ent.UserOrder) (*ent.UserConnection, error) {

@@ -7,8 +7,8 @@ import (
 	"fmt"
 	"log"
 
+	"github.com/rs/xid"
 	"github.com/shanna/entxid-test/ent/migrate"
-	"github.com/shanna/entxid-test/xid"
 
 	"github.com/shanna/entxid-test/ent/user"
 

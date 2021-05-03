@@ -46,7 +46,7 @@ autobind:
 models:
   ID:
     model:
-      - github.com/shanna/entxid-test/xid.ID
+      - github.com/shanna/entxid-test/graph/xidql.ID
   Node:
     model:
       - github.com/shanna/entxid-test/ent.Noder

@@ -3,9 +3,9 @@
 package ent
 
 import (
+	"github.com/rs/xid"
 	"github.com/shanna/entxid-test/ent/schema"
 	"github.com/shanna/entxid-test/ent/user"
-	"github.com/shanna/entxid-test/xid"
 )
 
 // The init function reads all schema descriptors with runtime code

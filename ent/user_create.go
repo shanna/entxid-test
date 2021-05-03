@@ -9,8 +9,8 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/rs/xid"
 	"github.com/shanna/entxid-test/ent/user"
-	"github.com/shanna/entxid-test/xid"
 )
 
 // UserCreate is the builder for creating a User entity.
@@ -29,14 +29,6 @@ func (uc *UserCreate) SetName(s string) *UserCreate {
 // SetID sets the "id" field.
 func (uc *UserCreate) SetID(x xid.ID) *UserCreate {
 	uc.mutation.SetID(x)
-	return uc
-}
-
-// SetNillableID sets the "id" field if the given value is not nil.
-func (uc *UserCreate) SetNillableID(x *xid.ID) *UserCreate {
-	if x != nil {
-		uc.SetID(*x)
-	}
 	return uc
 }
 

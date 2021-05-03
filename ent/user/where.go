@@ -4,8 +4,8 @@ package user
 
 import (
 	"entgo.io/ent/dialect/sql"
+	"github.com/rs/xid"
 	"github.com/shanna/entxid-test/ent/predicate"
-	"github.com/shanna/entxid-test/xid"
 )
 
 // ID filters vertices based on their ID field.

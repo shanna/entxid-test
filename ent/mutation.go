@@ -7,9 +7,9 @@ import (
 	"fmt"
 	"sync"
 
+	"github.com/rs/xid"
 	"github.com/shanna/entxid-test/ent/predicate"
 	"github.com/shanna/entxid-test/ent/user"
-	"github.com/shanna/entxid-test/xid"
 
 	"entgo.io/ent"
 )
